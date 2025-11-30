@@ -1,7 +1,7 @@
 # NexiumHub Scripts
 A collection of Roblox scripts created by **NexiumHub** 
 
-**Scripts**:
+# Scripts:
 
 Find The Brainrot
 ```lua
