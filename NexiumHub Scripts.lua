@@ -22,6 +22,9 @@ else
     warn("Failed to load NotificationLibrary:", lib)
 end
 
+-- URL constant for the majority of scripts
+local BASE_URL = "https://raw.githubusercontent.com/gumanba/Scripts/main/"
+
 -- Create main ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NexiumHubGamesMini"
@@ -32,396 +35,223 @@ local GUI_HEIGHT = 280
 local ITEM_HEIGHT = 25
 local PADDING = 6
 
-
 -- ===============================================
--- 2. Data & Formatting Functions
+-- 2. Condensed Data Structure
+-- (Optimized for faster parsing and smaller source file size)
 -- ===============================================
 
--- Master List of ALL scripts (Formatted automatically below)
-local rawScriptData = {
-    -[span_1](start_span)- Scripts from All List.txt[span_1](end_span)
-    {name = "99NightsintheBunker", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/99NightsintheBunker"))()'},
-    {name = "99NightsintheWildWest", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/99NightsintheWildWest"))()'},
-    {name = "AdoptMeEvent", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AdoptMeEvent"))()'},
-    {name = "AnimalTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimalTraining"))()'},
-    {name = "AnimeCardMaster", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeCardMaster"))()'},
-    {name = "AnimeCombats", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeCombats"))()'},
-    {name = "AnimeRNGTD", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeRNGTD"))()'},
-    {name = "AnimeRails", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeRails"))()'},
-    {name = "AnimeRangersX", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeRangersX"))()'},
-    {name = "AnimeSaga", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeSaga"))()'},
-    {name = "AnimeSimulator", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeSimulator"))()'},
-    {name = "AnimeSlashing", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeSlashing"))()'},
-    {name = "AnimeStrike", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AnimeStrike"))()'},
-    {name = "AquaRacer", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AquaRacer"))()'},
-    {name = "AriseCrossover", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/AriseCrossover"))()'},
-    {name = "ArrestBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ArrestBrainrot"))()'},
-    {name = "BattleforBrainrots", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BattleforBrainrots"))()'},
-    {name = "Bayside", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Bayside"))()'},
-    {name = "BeNPCorDIE", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeNPCorDIE"))()'},
-    {name = "BeaBeggar", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeaBeggar"))()'},
-    {name = "BeaCar", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeaCar"))()'},
-    {name = "BeaNinja", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeaNinja"))()'},
-    {name = "BeaSillySeal", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeaSillySeal"))()'},
-    {name = "Beaks", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Beaks"))()'},
-    {name = "BeastGames", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeastGames"))()'},
-    {name = "Beastify", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Beastify"))()'},
-    {name = "BeeRich", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BeeRich"))()'},
-    {name = "BladeLeague", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BladeLeague"))()'},
-    {name = "BloodofPunch", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BloodofPunch"))()'},
-    {name = "BloxFruitButGood", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BloxFruitButGood"))()'},
-    {name = "BloxLoot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BloxLoot"))()'},
-    {name = "BlueLock", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BlueLock"))()'},
-    {name = "BombtoMine", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BombtoMine"))()'},
-    {name = "BoxingBattles", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BoxingBattles"))()'},
-    {name = "Boxingfitness", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Boxingfitness"))()'},
-    {name = "BrainrotBattlegrounds", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotBattlegrounds"))()'},
-    {name = "BrainrotEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotEvolution"))()'},
-    {name = "BrainrotGarden", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotGarden"))()'},
-    {name = "BrainrotRoyale", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotRoyale"))()'},
-    {name = "BrainrotSlayers", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotSlayers"))()'},
-    {name = "BrainrotSlingshot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotSlingshot"))()'},
-    {name = "BrainrotTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotTraining"))()'},
-    {name = "BrainrotZombie", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotZombie"))()'},
-    {name = "BrainrotZombieTower", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrainrotZombieTower"))()'},
-    {name = "BreakBrainrotBones", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BreakBrainrotBones"))()'},
-    {name = "BreakaFriend", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BreakaFriend"))()'},
-    {name = "BreakyourBones", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BreakyourBones"))()'},
-    {name = "Breedingranch", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Breedingranch"))()'},
-    {name = "BridgeBattles", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BridgeBattles"))()'},
-    {name = "BrookhavenHalloween", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BrookhavenHalloween"))()'},
-    {name = "BubbleGumJumping", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BubbleGumJumping"))()'},
-    {name = "BuildACart", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildACart"))()'},
-    {name = "BuildAMiningMachine", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildAMiningMachine"))()'},
-    {name = "BuildAPlane", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildAPlane"))()'},
-    {name = "BuildAnObby", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildAnObby"))()'},
-    {name = "BuildCarZombies", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildCarZombies"))()'},
-    {name = "BuildFightSteal", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildFightSteal"))()'},
-    {name = "BuildMyCar", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildMyCar"))()'},
-    {name = "BuildToClimb", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildToClimb"))()'},
-    {name = "BuildaBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildaBrainrot"))()'},
-    {name = "BuildaCannon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildaCannon"))()'},
-    {name = "BuildaCar", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildaCar"))()'},
-    {name = "BuildaScamEmpire", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildaScamEmpire"))()'},
-    {name = "BuildaStore", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildaStore"))()'},
-    {name = "BuildaTractor", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildaTractor"))()'},
-    {name = "BuildandSurvivetheForest", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildandSurvivetheForest"))()'},
-    {name = "Buildur99NightsBase", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Buildur99NightsBase"))()'},
-    {name = "BuildyourEscape", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BuildyourEscape"))()'},
-    {name = "BulletCart", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/BulletCart"))()'},
-    {name = "CapybaraEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CapybaraEvolution"))()'},
-    {name = "CarDealershipCOPS", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipCOPS"))()'},
-    {name = "CarDealershipCarEvent", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipCarEvent"))()'},
-    {name = "CarDealershipEaster", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipEaster"))()'},
-    {name = "CarDealershipEvent", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipEvent"))()'},
-    {name = "CarDealershipHUNT", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipHUNT"))()'},
-    {name = "CarDealershipHalloween", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipHalloween"))()'},
-    {name = "CarDealershipPagani", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipPagani"))()'},
-    {name = "CarDealershipPolice", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipPolice"))()'},
-    {name = "CarDealershipSEASON", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarDealershipSEASON"))()'},
-    {name = "CarTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarTraining"))()'},
-    {name = "CarsvsTrucks", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CarsvsTrucks"))()'},
-    {name = "CatchaMonster", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CatchaMonster"))()'},
-    {name = "Chained", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Chained"))()'},
-    {name = "ClassClash", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ClassClash"))()'},
-    {name = "CleanaHouse", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CleanaHouse"))()'},
-    {name = "ClimbandJump", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ClimbandJump"))()'},
-    {name = "ClimbandSlide", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ClimbandSlide"))()'},
-    {name = "ClimbtoSaveBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ClimbtoSaveBrainrot"))()'},
-    {name = "CollectforUGC", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CollectforUGC"))()'},
-    {name = "CoolaBaddie", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CoolaBaddie"))()'},
-    {name = "CrashBots", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CrashBots"))()'},
-    {name = "CreateaFactory", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CreateaFactory"))()'},
-    {name = "CriminalTycoon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CriminalTycoon"))()'},
-    {name = "CutGrass", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CutGrass"))()'},
-    {name = "CutTrees", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/CutTrees"))()'},
-    {name = "DUMP", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DUMP"))()'},
-    {name = "DalgonaTycoon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DalgonaTycoon"))()'},
-    {name = "DanceForUGC", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DanceForUGC"))()'},
-    {name = "Dandy", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Dandy"))()'},
-    {name = "DeadDefense", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadDefense"))()'},
-    {name = "DeadOcean", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadOcean"))()'},
-    {name = "DeadRails", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadRails"))()'},
-    {name = "DeadRailsAuto", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadRailsAuto"))()'},
-    {name = "DeadRivers", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadRivers"))()'},
-    {name = "DeadSails", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadSails"))()'},
-    {name = "DeadSpells", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadSpells"))()'},
-    {name = "DeadlyDelivery", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DeadlyDelivery"))()'},
-    {name = "DemonBlade", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DemonBlade"))()'},
-    {name = "DemonWarriors", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DemonWarriors"))()'},
-    {name = "Demonfall", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Demonfall"))()'},
-    {name = "DesertDetectors", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DesertDetectors"))()'},
-    {name = "DigGrandmasBackyard", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DigGrandmasBackyard"))()'},
-    {name = "DigandHatchaBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DigandHatchaBrainrot"))()'},
-    {name = "Digit", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Digit"))()'},
-    {name = "DigtheBackyard", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DigtheBackyard"))()'},
-    {name = "DigtoEarth", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DigtoEarth"))()'},
-    {name = "DigtoEscape", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DigtoEscape"))()'},
-    {name = "DigtoSaveBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DigtoSaveBrainrot"))()'},
-    {name = "DogMan", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DogMan"))()'},
-    {name = "DontStealthe99Nights", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DontStealthe99Nights"))()'},
-    {name = "DontStealtheLabubu", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DontStealtheLabubu"))()'},
-    {name = "DontWakeTheFish", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DontWakeTheFish"))()'},
-    {name = "DontWaketheBrainrots", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DontWaketheBrainrots"))()'},
-    {name = "DontWaketheSpookyBrainrots", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DontWaketheSpookyBrainrots"))()'},
-    {name = "DragonTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DragonTraining"))()'},
-    {name = "DrillDigging", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DrillDigging"))()'},
-    {name = "DriveWorld", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DriveWorld"))()'},
-    {name = "DrivingEmpireLEGO", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DrivingEmpireLEGO"))()'},
-    {name = "DropaPoop", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DropaPoop"))()'},
-    {name = "DungeonHeroes", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DungeonHeroes"))()'},
-    {name = "DungeonLeveling", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/DungeonLeveling"))()'},
-    {name = "EatBrainrotforfight", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/EatBrainrotforfight"))()'},
-    {name = "EattheWorld", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/EattheWorld"))()'},
-    {name = "Edward", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Edward"))()'},
-    {name = "ElementalPowers", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ElementalPowers"))()'},
-    {name = "EpicMinigames", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/EpicMinigames"))()'},
-    {name = "EscapeAndSurviveHead", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/EscapeAndSurviveHead"))()'},
-    {name = "EvadeEvent", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/EvadeEvent"))()'},
-    {name = "EvolvetoSupreme", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/EvolvetoSupreme"))()'},
-    {name = "FREEUGCOBBY", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FREEUGCOBBY"))()'},
-    {name = "FightinaSupermarket", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FightinaSupermarket"))()'},
-    {name = "FindtheBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FindtheBrainrot"))()'},
-    {name = "FischModded", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FischModded"))()'},
-    {name = "FishGo", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FishGo"))()'},
-    {name = "FishTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FishTraining"))()'},
-    {name = "FishaBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FishaBrainrot"))()'},
-    {name = "FlyingWings", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FlyingWings"))()'},
-    {name = "FlytoSPACE", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/FlytoSPACE"))()'},
-    {name = "Forkthefish", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Forkthefish"))()'},
-    {name = "GOFISHING", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GOFISHING"))()'},
-    {name = "GardenTowerDefense", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GardenTowerDefense"))()'},
-    {name = "Givenchy", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Givenchy"))()'},
-    {name = "GlassBridge2", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GlassBridge2"))()'},
-    {name = "GoKartTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GoKartTraining"))()'},
-    {name = "GoalKick", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GoalKick"))()'},
-    {name = "GrabBattles", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrabBattles"))()'},
-    {name = "GrowAKingdom", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowAKingdom"))()'},
-    {name = "GrowCrystals", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowCrystals"))()'},
-    {name = "GrowEggs", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowEggs"))()'},
-    {name = "GrowaBusiness", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowaBusiness"))()'},
-    {name = "GrowaGarden", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowaGarden"))()'},
-    {name = "GrowaTree", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GrowaTree"))()'},
-    {name = "GuesstheKiller", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GuesstheKiller"))()'},
-    {name = "GunfightArena", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GunfightArena"))()'},
-    {name = "GymTrackRace", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/GymTrackRace"))()'},
-    {name = "HatchaDuck", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/HatchaDuck"))()'},
-    {name = "HireaFisher", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/HireaFisher"))()'},
-    {name = "HomelessSimulator", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/HomelessSimulator"))()'},
-    {name = "HorseRace", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/HorseRace"))()'},
-    {name = "HorseValley", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/HorseValley"))()'},
-    {name = "Hunters", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Hunters"))()'},
-    {name = "HuntyZombie", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/HuntyZombie"))()'},
-    {name = "Hyundai", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Hyundai"))()'},
-    {name = "InfectionGunfight", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/InfectionGunfight"))()'},
-    {name = "InkGame", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/InkGame"))()'},
-    {name = "ItalianBrainrotThieves", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ItalianBrainrotThieves"))()'},
-    {name = "JackAndJill", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/JackAndJill"))()'},
-    {name = "JetpackTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/JetpackTraining"))()'},
-    {name = "Jujutsu", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Jujutsu"))()'},
-    {name = "JumpInTheHole", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/JumpInTheHole"))()'},
-    {name = "JumpandSplash", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/JumpandSplash"))()'},
-    {name = "JumpwithBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/JumpwithBrainrot"))()'},
-    {name = "KIDZBOP", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/KIDZBOP"))()'},
-    {name = "KPOPSPEED", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/KPOPSPEED"))()'},
-    {name = "KayakRacing", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/KayakRacing"))()'},
-    {name = "KayakandSurf", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/KayakandSurf"))()'},
-    {name = "Keys", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Keys"))()'},
-    {name = "KeysandKnives", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/KeysandKnives"))()'},
-    {name = "Kingdom", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Kingdom"))()'},
-    {name = "Lancome", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Lancome"))()'},
-    {name = "LastRun", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/LastRun"))()'},
-    {name = "LiftEverything", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/LiftEverything"))()'},
-    {name = "LightGame", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/LightGame"))()'},
-    {name = "LittlestPet", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/LittlestPet"))()'},
-    {name = "Logitech", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Logitech"))()'},
-    {name = "Lootify", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Lootify"))()'},
-    {name = "MINGLE", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MINGLE"))()'},
-    {name = "MONSTERMETRO", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MONSTERMETRO"))()'},
-    {name = "MakeWeapons", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MakeWeapons"))()'},
-    {name = "MakeaArmy", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MakeaArmy"))()'},
-    {name = "MakeaBoat", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MakeaBoat"))()'},
-    {name = "MathMurder", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MathMurder"))()'},
-    {name = "MemeFruits", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MemeFruits"))()'},
-    {name = "MemoryMurder", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MemoryMurder"))()'},
-    {name = "MergeBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MergeBrainrot"))()'},
-    {name = "MergeTowerDefense", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MergeTowerDefense"))()'},
-    {name = "MergeandFight", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MergeandFight"))()'},
-    {name = "MergeforSPEED", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MergeforSPEED"))()'},
-    {name = "MetroLife", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MetroLife"))()'},
-    {name = "MindsFall", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MindsFall"))()'},
-    {name = "Mines", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Mines"))()'},
-    {name = "MonsterEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MonsterEvolution"))()'},
-    {name = "MotorcycleRacing", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MotorcycleRacing"))()'},
-    {name = "MyBrainrotEggFarm", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MyBrainrotEggFarm"))()'},
-    {name = "MyBrainrotRestaurant", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MyBrainrotRestaurant"))()'},
-    {name = "MyFishingPier", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MyFishingPier"))()'},
-    {name = "MyPlanetTycoon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MyPlanetTycoon"))()'},
-    {name = "MySingingBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/MySingingBrainrot"))()'},
-    {name = "NPO", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NPO"))()'},
-    {name = "NavyTycoon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NavyTycoon"))()'},
-    {name = "NetflixCPPB", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NetflixCPPB"))()'},
-    {name = "NetflixCobraKai", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NetflixCobraKai"))()'},
-    {name = "NetflixSquid", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NetflixSquid"))()'},
-    {name = "NetflixXO", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NetflixXO"))()'},
-    {name = "NinjaTime", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NinjaTime"))()'},
-    {name = "NinjaTycoon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NinjaTycoon"))()'},
-    {name = "NoobDefense", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NoobDefense"))()'},
-    {name = "NoobMergeArmy", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/NoobMergeArmy"))()'},
-    {name = "ONEBLOCK", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ONEBLOCK"))()'},
-    {name = "ObbyBike", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ObbyBike"))()'},
-    {name = "ObbyOtter", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ObbyOtter"))()'},
-    {name = "OldToiletTD", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/OldToiletTD"))()'},
-    {name = "OnePunchTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/OnePunchTraining"))()'},
-    {name = "PSGObby", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PSGObby"))()'},
-    {name = "PaddleRush", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PaddleRush"))()'},
-    {name = "PaperPlane", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PaperPlane"))()'},
-    {name = "PeakEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PeakEvolution"))()'},
-    {name = "PetMine", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PetMine"))()'},
-    {name = "PetSimCannon", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PetSimCannon"))()'},
-    {name = "PetSimGames", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PetSimGames"))()'},
-    {name = "PetSimSquid", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PetSimSquid"))()'},
-    {name = "PixelBlade", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PixelBlade"))()'},
-    {name = "PlaneTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PlaneTraining"))()'},
-    {name = "PlantEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PlantEvolution"))()'},
-    {name = "PlantsVsBrainrots", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PlantsVsBrainrots"))()'},
-    {name = "PrisonPump", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PrisonPump"))()'},
-    {name = "Prospecting", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Prospecting"))()'},
-    {name = "ProtectTheHouseFromMonsters", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ProtectTheHouseFromMonsters"))()'},
-    {name = "ProtectaFriend", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ProtectaFriend"))()'},
-    {name = "PullaSword", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PullaSword"))()'},
-    {name = "PunchWall", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PunchWall"))()'},
-    {name = "PushandSlide", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/PushandSlide"))()'},
-    {name = "RaceClicker", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RaceClicker"))()'},
-    {name = "RaceRNG", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RaceRNG"))()'},
-    {name = "RaiseaFarm", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RaiseaFarm"))()'},
-    {name = "RebornAsSword", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RebornAsSword"))()'},
-    {name = "RescueAnimals", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RescueAnimals"))()'},
-    {name = "RideandSlide", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RideandSlide"))()'},
-    {name = "RobotEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RobotEvolution"))()'},
-    {name = "RockFruit", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RockFruit"))()'},
-    {name = "RollerTraining", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/RollerTraining"))()'},
-    {name = "SMASHaTower", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SMASHaTower"))()'},
-    {name = "SOURPATCH", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SOURPATCH"))()'},
-    {name = "STEALCOOKIES", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/STEALCOOKIES"))()'},
-    {name = "Seasouls", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Seasouls"))()'},
-    {name = "SecretAgent", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SecretAgent"))()'},
-    {name = "SecretVillage", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SecretVillage"))()'},
-    {name = "Shed", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Shed"))()'},
-    {name = "ShootTheBrains", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ShootTheBrains"))()'},
-    {name = "ShootaBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/ShootaBrainrot"))()'},
-    {name = "Shrek", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Shrek"))()'},
-    {name = "SinkTheShip", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SinkTheShip"))()'},
-    {name = "SlitherBlox", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SlitherBlox"))()'},
-    {name = "SnailRace", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SnailRace"))()'},
-    {name = "SnowBall", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SnowBall"))()'},
-    {name = "SoccerSimulator", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SoccerSimulator"))()'},
-    {name = "SortTheBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SortTheBrainrot"))()'},
-    {name = "SpeedForEggs", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedForEggs"))()'},
-    {name = "SpeedForStep", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedForStep"))()'},
-    {name = "SpeedGunfight", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedGunfight"))()'},
-    {name = "SpeedJump", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedJump"))()'},
-    {name = "SpeedMerge", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedMerge"))()'},
-    {name = "SpeedObby", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedObby"))()'},
-    {name = "SpeedPrisonEscape", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpeedPrisonEscape"))()'},
-    {name = "SpinaBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SpinaBrainrot"))()'},
-    {name = "SprunbieRail", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SprunbieRail"))()'},
-    {name = "SquidEvolution", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SquidEvolution"))()'},
-    {name = "SquidGame", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SquidGame"))()'},
-    {name = "SquidGame3", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SquidGame3"))()'},
-    {name = "SquidGameX", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SquidGameX"))()'},
-    {name = "Steal99Nights", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Steal99Nights"))()'},
-    {name = "StealADeadRails", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealADeadRails"))()'},
-    {name = "StealAFish", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealAFish"))()'},
-    {name = "StealAFruit", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealAFruit"))()'},
-    {name = "StealBloxFruit", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealBloxFruit"))()'},
-    {name = "StealBrainrotMOD", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealBrainrotMOD"))()'},
-    {name = "StealFruits", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealFruits"))()'},
-    {name = "StealaBaddie", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaBaddie"))()'},
-    {name = "StealaBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaBrainrot"))()'},
-    {name = "StealaBrainrotMOD", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaBrainrotMOD"))()'},
-    {name = "StealaCapybara", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaCapybara"))()'},
-    {name = "StealaCar", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaCar"))()'},
-    {name = "StealaCharacter", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaCharacter"))()'},
-    {name = "StealaCountry", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaCountry"))()'},
-    {name = "StealaFreddy", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaFreddy"))()'},
-    {name = "StealaGarden", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaGarden"))()'},
-    {name = "StealaGubby", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaGubby"))()'},
-    {name = "StealaLabubu", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaLabubu"))()'},
-    {name = "StealaPet", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaPet"))()'},
-    {name = "StealaPlane", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaPlane"))()'},
-    {name = "StealaTruck", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealaTruck"))()'},
-    {name = "Stealall", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Stealall"))()'},
-    {name = "StealandEat", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealandEat"))()'},
-    {name = "StealtheBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealtheBrainrot"))()'},
-    {name = "StealtheDough", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealtheDough"))()'},
-    {name = "StealtheFish", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealtheFish"))()'},
-    {name = "StealthePets", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealthePets"))()'},
-    {name = "StealtheUGC", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealtheUGC"))()'},
-    {name = "StealtheVillain", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StealtheVillain"))()'},
-    {name = "StomachAche", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StomachAche"))()'},
-    {name = "StrongmanSim", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/StrongmanSim"))()'},
-    {name = "SuperHeroFight", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SuperHeroFight"))()'},
-    {name = "SuperSavage", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SuperSavage"))()'},
-    {name = "SurviveOnPlane", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SurviveOnPlane"))()'},
-    {name = "SurviveTheBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SurviveTheBrainrot"))()'},
-    {name = "SurviveTheTsunami", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SurviveTheTsunami"))()'},
-    {name = "SurviveTheWave", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SurviveTheWave"))()'},
-    {name = "SurviveonaRaft", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SurviveonaRaft"))()'},
-    {name = "SurviveWaveZ", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SurviveWaveZ"))()'},
-    {name = "SwimtoSavePrincess", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SwimtoSavePrincess"))()'},
-    {name = "SwordFishing", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/SwordFishing"))()'},
-    {name = "TBSEscape", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TBSEscape"))()'},
-    {name = "TankWar", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TankWar"))()'},
-    {name = "TapAll", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TapAll"))()'},
-    {name = "TapToEarn", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TapToEarn"))()'},
-    {name = "TheGreatEscape", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TheGreatEscape"))()'},
-    {name = "TheKill", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TheKill"))()'},
-    {name = "TheStrongest", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TheStrongest"))()'},
-    {name = "TowerOfHell", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TowerOfHell"))()'},
-    {name = "TowerWarfare", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TowerWarfare"))()'},
-    {name = "TradeUp", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TradeUp"))()'},
-    {name = "TrainAndBattle", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TrainAndBattle"))()'},
-    {name = "TrainYourBrainrot", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TrainYourBrainrot"))()'},
-    {name = "TrainYourDog", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TrainYourDog"))()'},
-    {name = "TreasureHunter", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TreasureHunter"))()'},
-    {name = "Treadmill", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Treadmill"))()'},
-    {name = "TryNotToFall", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/TryNotToFall"))()'},
-    {name = "UltimateBaseball", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/UltimateBaseball"))()'},
-    {name = "UnboxRandom", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/UnboxRandom"))()'},
-    {name = "Unboxing", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Unboxing"))()'},
-    {name = "Unstoppable", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/Unstoppable"))()'},
-    {name = "WashingSimulator", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/WashingSimulator"))()'},
-    {name = "WaveBattle", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/WaveBattle"))()'},
-    {name = "WestGunfight", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/WestGunfight"))()'},
-    {name = "WestTower", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/WestTower"))()'},
-    {name = "WizardWest", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/WizardWest"))()'},
-    {name = "WonderChase", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/WonderChase"))()'},
-    {name = "YardSale", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/YardSale"))()'},
-    {name = "YeetAFriend", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/YeetAFriend"))()'},
-    {name = "YourBank", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/YourBank"))()'},
-    {name = "adustytrip", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/adustytrip"))()'},
-    {name = "bladebattle", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/bladebattle"))()'},
-    {name = "buildurbase", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/buildurbase"))()'},
-    {name = "elfScientist", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/elfScientist"))()'},
-    {name = "elfUP", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/elfUP"))()'},
-    -- Unique Scripts from previous step (not in All List.txt from gumanba)
-    {name = "Fish It 1", command = 'loadstring(game:HttpGet("https://pandadevelopment.net/virtual/file/ecd9069dab3d2aa3"))()'},
-    {name = "Flick 1", command = 'loadstring(game:HttpGet("https://apigetunx.vercel.app/UNX.lua",true))()'},
-    {name = "ROBLOX Purchase Exploits 1", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Sqweex-lua/Free-Product-Obfs/main/obfuscated.lua"))()'},
-    {name = "Violence District 1", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/arcadeisreal/717exe_Violence_District/refs/heads/main/loader.lua"))()'},
-    {name = "Violence District 2", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/skidma/solarae/refs/heads/main/vd.lua"))()'},
-    {name = "Pixel Quest 1", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/darkhub99/pixelquest/refs/heads/main/obfuscated_script-1762689711545.lua.txt"))()'},
-    {name = "Bake Or Die 1", command = 'loadstring(game:HttpGet("https://rawscripts.net/raw/Bake-or-Die-Kill-All-Bring-Items-Esp-etc-68463"))()'},
-    {name = "Deadly Delivery 2", command = 'loadstring(game:HttpGet("https://raw.githubusercontent.com/VGXMODPLAYER68/Vgxmod-Hub/refs/heads/main/Deadly%20delivery.lua"))()'},
+-- Scripts from gumanba's list (Key = Raw Script Name, Value = URL Path/Endpoint)
+local gumanbaScripts = {
+    ["99NightsintheBunker"] = "99NightsintheBunker", ["99NightsintheWildWest"] = "99NightsintheWildWest",
+    ["AdoptMeEvent"] = "AdoptMeEvent", ["AnimalTraining"] = "AnimalTraining",
+    ["AnimeCardMaster"] = "AnimeCardMaster", ["AnimeCombats"] = "AnimeCombats",
+    ["AnimeRNGTD"] = "AnimeRNGTD", ["AnimeRails"] = "AnimeRails",
+    ["AnimeRangersX"] = "AnimeRangersX", ["AnimeSaga"] = "AnimeSaga",
+    ["AnimeSimulator"] = "AnimeSimulator", ["AnimeSlashing"] = "AnimeSlashing",
+    ["AnimeStrike"] = "AnimeStrike", ["AquaRacer"] = "AquaRacer",
+    ["AriseCrossover"] = "AriseCrossover", ["ArrestBrainrot"] = "ArrestBrainrot",
+    ["BattleforBrainrots"] = "BattleforBrainrots", ["Bayside"] = "Bayside",
+    ["BeNPCorDIE"] = "BeNPCorDIE", ["BeaBeggar"] = "BeaBeggar",
+    ["BeaCar"] = "BeaCar", ["BeaNinja"] = "BeaNinja",
+    ["BeaSillySeal"] = "BeaSillySeal", ["Beaks"] = "Beaks",
+    ["BeastGames"] = "BeastGames", ["Beastify"] = "Beastify",
+    ["BeeRich"] = "BeeRich", ["BladeLeague"] = "BladeLeague",
+    ["BloodofPunch"] = "BloodofPunch", ["BloxFruitButGood"] = "BloxFruitButGood",
+    ["BloxLoot"] = "BloxLoot", ["BlueLock"] = "BlueLock",
+    ["BombtoMine"] = "BombtoMine", ["BoxingBattles"] = "BoxingBattles",
+    ["Boxingfitness"] = "Boxingfitness", ["BrainrotBattlegrounds"] = "BrainrotBattlegrounds",
+    ["BrainrotEvolution"] = "BrainrotEvolution", ["BrainrotGarden"] = "BrainrotGarden",
+    ["BrainrotRoyale"] = "BrainrotRoyale", ["BrainrotSlayers"] = "BrainrotSlayers",
+    ["BrainrotSlingshot"] = "BrainrotSlingshot", ["BrainrotTraining"] = "BrainrotTraining",
+    ["BrainrotZombie"] = "BrainrotZombie", ["BrainrotZombieTower"] = "BrainrotZombieTower",
+    ["BreakBrainrotBones"] = "BreakBrainrotBones", ["BreakaFriend"] = "BreakaFriend",
+    ["BreakyourBones"] = "BreakyourBones", ["Breedingranch"] = "Breedingranch",
+    ["BridgeBattles"] = "BridgeBattles", ["BrookhavenHalloween"] = "BrookhavenHalloween",
+    ["BubbleGumJumping"] = "BubbleGumJumping", ["BuildACart"] = "BuildACart",
+    ["BuildAMiningMachine"] = "BuildAMiningMachine", ["BuildAPlane"] = "BuildAPlane",
+    ["BuildAnObby"] = "BuildAnObby", ["BuildCarZombies"] = "BuildCarZombies",
+    ["BuildFightSteal"] = "BuildFightSteal", ["BuildMyCar"] = "BuildMyCar",
+    ["BuildToClimb"] = "BuildToClimb", ["BuildaBrainrot"] = "BuildaBrainrot",
+    ["BuildaCannon"] = "BuildaCannon", ["BuildaCar"] = "BuildaCar",
+    ["BuildaScamEmpire"] = "BuildaScamEmpire", ["BuildaStore"] = "BuildaStore",
+    ["BuildaTractor"] = "BuildaTractor", ["BuildandSurvivetheForest"] = "BuildandSurvivetheForest",
+    ["Buildur99NightsBase"] = "Buildur99NightsBase", ["BuildyourEscape"] = "BuildyourEscape",
+    ["BulletCart"] = "BulletCart", ["CapybaraEvolution"] = "CapybaraEvolution",
+    ["CarDealershipCOPS"] = "CarDealershipCOPS", ["CarDealershipCarEvent"] = "CarDealershipCarEvent",
+    ["CarDealershipEaster"] = "CarDealershipEaster", ["CarDealershipEvent"] = "CarDealershipEvent",
+    ["CarDealershipHUNT"] = "CarDealershipHUNT", ["CarDealershipHalloween"] = "CarDealershipHalloween",
+    ["CarDealershipPagani"] = "CarDealershipPagani", ["CarDealershipPolice"] = "CarDealershipPolice",
+    ["CarDealershipSEASON"] = "CarDealershipSEASON", ["CarTraining"] = "CarTraining",
+    ["CarsvsTrucks"] = "CarsvsTrucks", ["CatchaMonster"] = "CatchaMonster",
+    ["Chained"] = "Chained", ["ClassClash"] = "ClassClash",
+    ["CleanaHouse"] = "CleanaHouse", ["ClimbandJump"] = "ClimbandJump",
+    ["ClimbandSlide"] = "ClimbandSlide", ["ClimbtoSaveBrainrot"] = "ClimbtoSaveBrainrot",
+    ["CollectforUGC"] = "CollectforUGC", ["CoolaBaddie"] = "CoolaBaddie",
+    ["CrashBots"] = "CrashBots", ["CreateaFactory"] = "CreateaFactory",
+    ["CriminalTycoon"] = "CriminalTycoon", ["CutGrass"] = "CutGrass",
+    ["CutTrees"] = "CutTrees", ["DUMP"] = "DUMP",
+    ["DalgonaTycoon"] = "DalgonaTycoon", ["DanceForUGC"] = "DanceForUGC",
+    ["Dandy"] = "Dandy", ["DeadDefense"] = "DeadDefense",
+    ["DeadOcean"] = "DeadOcean", ["DeadRails"] = "DeadRails",
+    ["DeadRailsAuto"] = "DeadRailsAuto", ["DeadRivers"] = "DeadRivers",
+    ["DeadSails"] = "DeadSails", ["DeadSpells"] = "DeadSpells",
+    ["DeadlyDelivery"] = "DeadlyDelivery", ["DemonBlade"] = "DemonBlade",
+    ["DemonWarriors"] = "DemonWarriors", ["Demonfall"] = "Demonfall",
+    ["DesertDetectors"] = "DesertDetectors", ["DigGrandmasBackyard"] = "DigGrandmasBackyard",
+    ["DigandHatchaBrainrot"] = "DigandHatchaBrainrot", ["Digit"] = "Digit",
+    ["DigtheBackyard"] = "DigtheBackyard", ["DigtoEarth"] = "DigtoEarth",
+    ["DigtoEscape"] = "DigtoEscape", ["DigtoSaveBrainrot"] = "DigtoSaveBrainrot",
+    ["DogMan"] = "DogMan", ["DontStealthe99Nights"] = "DontStealthe99Nights",
+    ["DontStealtheLabubu"] = "DontStealtheLabubu", ["DontWakeTheFish"] = "DontWakeTheFish",
+    ["DontWaketheBrainrots"] = "DontWaketheBrainrots", ["DontWaketheSpookyBrainrots"] = "DontWaketheSpookyBrainrots",
+    ["DragonTraining"] = "DragonTraining", ["DrillDigging"] = "DrillDigging",
+    ["DriveWorld"] = "DriveWorld", ["DrivingEmpireLEGO"] = "DrivingEmpireLEGO",
+    ["DropaPoop"] = "DropaPoop", ["DungeonHeroes"] = "DungeonHeroes",
+    ["DungeonLeveling"] = "DungeonLeveling", ["EatBrainrotforfight"] = "EatBrainrotforfight",
+    ["EattheWorld"] = "EattheWorld", ["Edward"] = "Edward",
+    ["ElementalPowers"] = "ElementalPowers", ["EpicMinigames"] = "EpicMinigames",
+    ["EscapeAndSurviveHead"] = "EscapeAndSurviveHead", ["EvadeEvent"] = "EvadeEvent",
+    ["EvolvetoSupreme"] = "EvolvetoSupreme", ["FREEUGCOBBY"] = "FREEUGCOBBY",
+    ["FightinaSupermarket"] = "FightinaSupermarket", ["FindtheBrainrot"] = "FindtheBrainrot",
+    ["FischModded"] = "FischModded", ["FishGo"] = "FishGo",
+    ["FishTraining"] = "FishTraining", ["FishaBrainrot"] = "FishaBrainrot",
+    ["FlyingWings"] = "FlyingWings", ["FlytoSPACE"] = "FlytoSPACE",
+    ["Forkthefish"] = "Forkthefish", ["GOFISHING"] = "GOFISHING",
+    ["GardenTowerDefense"] = "GardenTowerDefense", ["Givenchy"] = "Givenchy",
+    ["GlassBridge2"] = "GlassBridge2", ["GoKartTraining"] = "GoKartTraining",
+    ["GoalKick"] = "GoalKick", ["GrabBattles"] = "GrabBattles",
+    ["GrowAKingdom"] = "GrowAKingdom", ["GrowCrystals"] = "GrowCrystals",
+    ["GrowEggs"] = "GrowEggs", ["GrowaBusiness"] = "GrowaBusiness",
+    ["GrowaGarden"] = "GrowaGarden", ["GrowaTree"] = "GrowaTree",
+    ["GuesstheKiller"] = "GuesstheKiller", ["GunfightArena"] = "GunfightArena",
+    ["GymTrackRace"] = "GymTrackRace", ["HatchaDuck"] = "HatchaDuck",
+    ["HireaFisher"] = "HireaFisher", ["HomelessSimulator"] = "HomelessSimulator",
+    ["HorseRace"] = "HorseRace", ["HorseValley"] = "HorseValley",
+    ["Hunters"] = "Hunters", ["HuntyZombie"] = "HuntyZombie",
+    ["Hyundai"] = "Hyundai", ["InfectionGunfight"] = "InfectionGunfight",
+    ["InkGame"] = "InkGame", ["ItalianBrainrotThieves"] = "ItalianBrainrotThieves",
+    ["JackAndJill"] = "JackAndJill", ["JetpackTraining"] = "JetpackTraining",
+    ["Jujutsu"] = "Jujutsu", ["JumpInTheHole"] = "JumpInTheHole",
+    ["JumpandSplash"] = "JumpandSplash", ["JumpwithBrainrot"] = "JumpwithBrainrot",
+    ["KIDZBOP"] = "KIDZBOP", ["KPOPSPEED"] = "KPOPSPEED",
+    ["KayakRacing"] = "KayakRacing", ["KayakandSurf"] = "KayakandSurf",
+    ["Keys"] = "Keys", ["KeysandKnives"] = "KeysandKnives",
+    ["Kingdom"] = "Kingdom", ["Lancome"] = "Lancome",
+    ["LastRun"] = "LastRun", ["LiftEverything"] = "LiftEverything",
+    ["LightGame"] = "LightGame", ["LittlestPet"] = "LittlestPet",
+    ["Logitech"] = "Logitech", ["Lootify"] = "Lootify",
+    ["MINGLE"] = "MINGLE", ["MONSTERMETRO"] = "MONSTERMETRO",
+    ["MakeWeapons"] = "MakeWeapons", ["MakeaArmy"] = "MakeaArmy",
+    ["MakeaBoat"] = "MakeaBoat", ["MathMurder"] = "MathMurder",
+    ["MemeFruits"] = "MemeFruits", ["MemoryMurder"] = "MemoryMurder",
+    ["MergeBrainrot"] = "MergeBrainrot", ["MergeTowerDefense"] = "MergeTowerDefense",
+    ["MergeandFight"] = "MergeandFight", ["MergeforSPEED"] = "MergeforSPEED",
+    ["MetroLife"] = "MetroLife", ["MindsFall"] = "MindsFall",
+    ["Mines"] = "Mines", ["MonsterEvolution"] = "MonsterEvolution",
+    ["MotorcycleRacing"] = "MotorcycleRacing", ["MyBrainrotEggFarm"] = "MyBrainrotEggFarm",
+    ["MyBrainrotRestaurant"] = "MyBrainrotRestaurant", ["MyFishingPier"] = "MyFishingPier",
+    ["MyPlanetTycoon"] = "MyPlanetTycoon", ["MySingingBrainrot"] = "MySingingBrainrot",
+    ["NPO"] = "NPO", ["NavyTycoon"] = "NavyTycoon",
+    ["NetflixCPPB"] = "NetflixCPPB", ["NetflixCobraKai"] = "NetflixCobraKai",
+    ["NetflixSquid"] = "NetflixSquid", ["NetflixXO"] = "NetflixXO",
+    ["NinjaTime"] = "NinjaTime", ["NinjaTycoon"] = "NinjaTycoon",
+    ["NoobDefense"] = "NoobDefense", ["NoobMergeArmy"] = "NoobMergeArmy",
+    ["ONEBLOCK"] = "ONEBLOCK", ["ObbyBike"] = "ObbyBike",
+    ["ObbyOtter"] = "ObbyOtter", ["OldToiletTD"] = "OldToiletTD",
+    ["OnePunchTraining"] = "OnePunchTraining", ["PSGObby"] = "PSGObby",
+    ["PaddleRush"] = "PaddleRush", ["PaperPlane"] = "PaperPlane",
+    ["PeakEvolution"] = "PeakEvolution", ["PetMine"] = "PetMine",
+    ["PetSimCannon"] = "PetSimCannon", ["PetSimGames"] = "PetSimGames",
+    ["PetSimSquid"] = "PetSimSquid", ["PixelBlade"] = "PixelBlade",
+    ["PlaneTraining"] = "PlaneTraining", ["PlantEvolution"] = "PlantEvolution",
+    ["PlantsVsBrainrots"] = "PlantsVsBrainrots", ["PrisonPump"] = "PrisonPump",
+    ["Prospecting"] = "Prospecting", ["ProtectTheHouseFromMonsters"] = "ProtectTheHouseFromMonsters",
+    ["ProtectaFriend"] = "ProtectaFriend", ["PullaSword"] = "PullaSword",
+    ["PunchWall"] = "PunchWall", ["PushandSlide"] = "PushandSlide",
+    ["RaceClicker"] = "RaceClicker", ["RaceRNG"] = "RaceRNG",
+    ["RaiseaFarm"] = "RaiseaFarm", ["RebornAsSword"] = "RebornAsSword",
+    ["RescueAnimals"] = "RescueAnimals", ["RideandSlide"] = "RideandSlide",
+    ["RobotEvolution"] = "RobotEvolution", ["RockFruit"] = "RockFruit",
+    ["RollerTraining"] = "RollerTraining", ["SMASHaTower"] = "SMASHaTower",
+    ["SOURPATCH"] = "SOURPATCH", ["STEALCOOKIES"] = "STEALCOOKIES",
+    ["Seasouls"] = "Seasouls", ["SecretAgent"] = "SecretAgent",
+    ["SecretVillage"] = "SecretVillage", ["Shed"] = "Shed",
+    ["ShootTheBrains"] = "ShootTheBrains", ["ShootaBrainrot"] = "ShootaBrainrot",
+    ["Shrek"] = "Shrek", ["SinkTheShip"] = "SinkTheShip",
+    ["SlitherBlox"] = "SlitherBlox", ["SnailRace"] = "SnailRace",
+    ["SnowBall"] = "SnowBall", ["SoccerSimulator"] = "SoccerSimulator",
+    ["SortTheBrainrot"] = "SortTheBrainrot", ["SpeedForEggs"] = "SpeedForEggs",
+    ["SpeedForStep"] = "SpeedForStep", ["SpeedGunfight"] = "SpeedGunfight",
+    ["SpeedJump"] = "SpeedJump", ["SpeedMerge"] = "SpeedMerge",
+    ["SpeedObby"] = "SpeedObby", ["SpeedPrisonEscape"] = "SpeedPrisonEscape",
+    ["SpinaBrainrot"] = "SpinaBrainrot", ["SprunbieRail"] = "SprunbieRail",
+    ["SquidEvolution"] = "SquidEvolution", ["SquidGame"] = "SquidGame",
+    ["SquidGame3"] = "SquidGame3", ["SquidGameX"] = "SquidGameX",
+    ["Steal99Nights"] = "Steal99Nights", ["StealADeadRails"] = "StealADeadRails",
+    ["StealAFish"] = "StealAFish", ["StealAFruit"] = "StealAFruit",
+    ["StealBloxFruit"] = "StealBloxFruit", ["StealBrainrotMOD"] = "StealBrainrotMOD",
+    ["StealFruits"] = "StealFruits", ["StealaBaddie"] = "StealaBaddie",
+    ["StealaBrainrot"] = "StealaBrainrot", ["StealaBrainrotMOD"] = "StealaBrainrotMOD",
+    ["StealaCapybara"] = "StealaCapybara", ["StealaCar"] = "StealaCar",
+    ["StealaCharacter"] = "StealaCharacter", ["StealaCountry"] = "StealaCountry",
+    ["StealaFreddy"] = "StealaFreddy", ["StealaGarden"] = "StealaGarden",
+    ["StealaGubby"] = "StealaGubby", ["StealaLabubu"] = "StealaLabubu",
+    ["StealaPet"] = "StealaPet", ["StealaPlane"] = "StealaPlane",
+    ["StealaTruck"] = "StealaTruck", ["Stealall"] = "Stealall",
+    ["StealandEat"] = "StealandEat", ["StealtheBrainrot"] = "StealtheBrainrot",
+    ["StealtheDough"] = "StealtheDough", ["StealtheFish"] = "StealtheFish",
+    ["StealthePets"] = "StealthePets", ["StealtheUGC"] = "StealtheUGC",
+    ["StealtheVillain"] = "StealtheVillain", ["StomachAche"] = "StomachAche",
+    ["StrongmanSim"] = "StrongmanSim", ["SuperHeroFight"] = "SuperHeroFight",
+    ["SuperSavage"] = "SuperSavage", ["SurviveOnPlane"] = "SurviveOnPlane",
+    ["SurviveTheBrainrot"] = "SurviveTheBrainrot", ["SurviveTheTsunami"] = "SurviveTheTsunami",
+    ["SurviveTheWave"] = "SurviveTheWave", ["SurviveonaRaft"] = "SurviveonaRaft",
+    ["SurviveWaveZ"] = "SurviveWaveZ", ["SwimtoSavePrincess"] = "SwimtoSavePrincess",
+    ["SwordFishing"] = "SwordFishing", ["TBSEscape"] = "TBSEscape",
+    ["TankWar"] = "TankWar", ["TapAll"] = "TapAll",
+    ["TapToEarn"] = "TapToEarn", ["TheGreatEscape"] = "TheGreatEscape",
+    ["TheKill"] = "TheKill", ["TheStrongest"] = "TheStrongest",
+    ["TowerOfHell"] = "TowerOfHell", ["TowerWarfare"] = "TowerWarfare",
+    ["TradeUp"] = "TradeUp", ["TrainAndBattle"] = "TrainAndBattle",
+    ["TrainYourBrainrot"] = "TrainYourBrainrot", ["TrainYourDog"] = "TrainYourDog",
+    ["TreasureHunter"] = "TreasureHunter", ["Treadmill"] = "Treadmill",
+    ["TryNotToFall"] = "TryNotToFall", ["UltimateBaseball"] = "UltimateBaseball",
+    ["UnboxRandom"] = "UnboxRandom", ["Unboxing"] = "Unboxing",
+    ["Unstoppable"] = "Unstoppable", ["WashingSimulator"] = "WashingSimulator",
+    ["WaveBattle"] = "WaveBattle", ["WestGunfight"] = "WestGunfight",
+    ["WestTower"] = "WestTower", ["WizardWest"] = "WizardWest",
+    ["WonderChase"] = "WonderChase", ["YardSale"] = "YardSale",
+    ["YeetAFriend"] = "YeetAFriend", ["YourBank"] = "YourBank",
+    ["adustytrip"] = "adustytrip", ["bladebattle"] = "bladebattle",
+    ["buildurbase"] = "buildurbase", ["elfScientist"] = "elfScientist",
+    ["elfUP"] = "elfUP",
 }
+
+-- Special Scripts with non-standard URLs
+local specialScripts = {
+    ["Fish It 1"] = "https://pandadevelopment.net/virtual/file/ecd9069dab3d2aa3",
+    ["Flick 1"] = "https://apigetunx.vercel.app/UNX.lua",
+    ["ROBLOX Purchase Exploits 1"] = "https://raw.githubusercontent.com/Sqweex-lua/Free-Product-Obfs/main/obfuscated.lua",
+    ["Violence District 1"] = "https://raw.githubusercontent.com/arcadeisreal/717exe_Violence_District/refs/heads/main/loader.lua",
+    ["Violence District 2"] = "https://raw.githubusercontent.com/skidma/solarae/refs/heads/main/vd.lua",
+    ["Pixel Quest 1"] = "https://raw.githubusercontent.com/darkhub99/pixelquest/refs/heads/main/obfuscated_script-1762689711545.lua.txt",
+    ["Bake Or Die 1"] = "https://rawscripts.net/raw/Bake-or-Die-Kill-All-Bring-Items-Esp-etc-68463",
+    ["Deadly Delivery 2"] = "https://raw.githubusercontent.com/VGXMODPLAYER68/Vgxmod-Hub/refs/heads/main/Deadly%20delivery.lua",
+}
+
+-- ===============================================
+-- 3. Data Processing and Sorting
+-- (The most performance-heavy work is done once here)
+-- ===============================================
+
+local finalScriptData = {}
 
 -- Function to automatically add spaces to concatenated names like 'BuildAMiningMachine'
 local function formatName(name)
-    -- Add space between lowercase and uppercase (e.g., 'forBrainrots' -> 'for Brainrots')
+    -- Add space between lowercase and uppercase
     local formatted = name:gsub("([a-z])([A-Z])", "%1 %2")
     
-    -- Add space between a digit and a letter (e.g., '99Nights' -> '99 Nights', 'SquidGame3' -> 'SquidGame 3')
+    -- Add space between a digit and a letter (e.g., '99 Nights', 'Squid Game 3')
     formatted = formatted:gsub("([a-zA-Z])(%d)", "%1 %2")
     formatted = formatted:gsub("(%d)([a-zA-Z])", "%1 %2")
 
@@ -431,26 +261,33 @@ local function formatName(name)
     return formatted
 end
 
-local scriptData = {}
+-- Process gumanbaScripts
+for rawName, urlPath in pairs(gumanbaScripts) do
+    local formattedName = formatName(rawName)
+    local command = string.format('loadstring(game:HttpGet("%s%s"))()', BASE_URL, urlPath)
+    
+    table.insert(finalScriptData, {name = formattedName, command = command})
+end
 
--- 3. Process the raw data and apply formatting
-for _, data in ipairs(rawScriptData) do
-    -- Only format if the name doesn't already contain a space (for the manual entries)
-    local finalName = data.name:find(" ") and data.name or formatName(data.name)
-    table.insert(scriptData, {
-        name = finalName,
-        command = data.command
-    })
+-- Process specialScripts (already formatted or URL is non-standard)
+for name, url in pairs(specialScripts) do
+    local command = string.format('loadstring(game:HttpGet("%s"))()', url)
+    
+    -- Special case for Flick to include the 'true' argument if necessary
+    if url:find("UNX.lua") then
+         command = 'loadstring(game:HttpGet("' .. url .. '",true))()'
+    end
+    
+    table.insert(finalScriptData, {name = name, command = command})
 end
 
 -- Sorting function to ensure version numbers sort correctly (e.g., Game 1 before Game 10)
 local function extractBaseNameAndNumber(name)
-    -- Match name followed by space and digits
     local base, numStr = name:match("^(.*) (%d+)$")
     if base and numStr then
         return base, tonumber(numStr)
     end
-    return name, 0 -- If no number is found, return the full name and 0
+    return name, 0
 end
 
 local function customSortScripts(a, b)
@@ -458,21 +295,19 @@ local function customSortScripts(a, b)
     local baseB, numB = extractBaseNameAndNumber(b.name)
 
     if baseA == baseB then
-        -- Bases are the same, sort numerically
         return numA < numB
     else
-        -- Bases are different, sort alphabetically
         return baseA < baseB
     end
 end
 
--- Sort the final list
-table.sort(scriptData, customSortScripts)
+table.sort(finalScriptData, customSortScripts)
 
 
 -- ===============================================
 -- 4. Main GUI Frame & Elements
 -- ===============================================
+-- (UI instantiation remains similar, but data handling is cleaner)
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0, GUI_WIDTH, 0, GUI_HEIGHT)
@@ -519,7 +354,6 @@ local restoreCorner = Instance.new("UICorner")
 restoreCorner.CornerRadius = UDim.new(0, 5)
 restoreCorner.Parent = restoreButton
 
--- Close & Restore behavior:
 closeButton.MouseButton1Click:Connect(function()
     mainFrame.Visible = false
     restoreButton.Visible = true
@@ -578,7 +412,6 @@ local function makeFrameDraggable(frame)
     end)
 end
 
--- Apply the drag function to the main frames
 makeFrameDraggable(mainFrame)
 makeFrameDraggable(restoreButton)
 
@@ -587,7 +420,8 @@ makeFrameDraggable(restoreButton)
 -- ===============================================
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -closeButton.Size.X.Offset - PADDING, 0, 20)
-titleLabel.Position = UDim2.new(0, PADDING, 0, PADDING)
+local titleLabelY = PADDING
+titleLabel.Position = UDim2.new(0, PADDING, 0, titleLabelY)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = "NexiumHub Scripts"
 titleLabel.Font = Enum.Font.GothamBold
@@ -598,10 +432,10 @@ titleLabel.Parent = mainFrame
 
 -- Search box
 local searchBox = Instance.new("TextBox")
-local searchBoxY = titleLabel.Position.Y.Offset + titleLabel.Size.Y.Offset + PADDING
+local searchBoxY = titleLabelY + titleLabel.Size.Y.Offset + PADDING
 searchBox.Size = UDim2.new(1, -PADDING * 2, 0, 20)
 searchBox.Position = UDim2.new(0, PADDING, 0, searchBoxY)
-searchBox.PlaceholderText = "Search games (" .. #scriptData .. " available)..."
+searchBox.PlaceholderText = string.format("Search games (%d available)...", #finalScriptData)
 searchBox.Text = ""
 searchBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -616,8 +450,9 @@ searchCorner.Parent = searchBox
 
 -- Scrolling frame
 local scrollingFrame = Instance.new("ScrollingFrame")
-scrollingFrame.Size = UDim2.new(1, -PADDING * 2, 1, -(searchBoxY + searchBox.Size.Y.Offset + PADDING * 2))
-scrollingFrame.Position = UDim2.new(0, PADDING, 0, searchBoxY + searchBox.Size.Y.Offset + PADDING)
+local scrollingFrameY = searchBoxY + searchBox.Size.Y.Offset + PADDING
+scrollingFrame.Size = UDim2.new(1, -PADDING * 2, 1, -(scrollingFrameY + PADDING))
+scrollingFrame.Position = UDim2.new(0, PADDING, 0, scrollingFrameY)
 scrollingFrame.BackgroundTransparency = 1
 scrollingFrame.ScrollBarThickness = 4
 scrollingFrame.Parent = mainFrame
@@ -716,7 +551,7 @@ local function createButton(data, layoutOrder)
 end
 
 -- Generate all items using the custom sorted scriptData
-for i, data in ipairs(scriptData) do
+for i, data in ipairs(finalScriptData) do
     createButton(data, i)
 end
 
@@ -728,7 +563,6 @@ local function updateFilter(query)
     for i, obj in ipairs(uiItems) do
         obj.button.Visible = obj.name:lower():find(query) ~= nil
     end
-    -- Must call ApplyLayout after changing visibility for the Grid to adjust
     gridLayout:ApplyLayout()
 end
 
